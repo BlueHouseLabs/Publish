@@ -5,7 +5,7 @@
 */
 
 import XCTest
-import Publish
+@testable import Publish
 import Plot
 import Ink
 
@@ -44,7 +44,7 @@ final class PluginTests: PublishTestCase {
     func testAddingPluginToDefaultPipeline() throws {
         let htmlFactory = HTMLFactoryMock<WebsiteStub.WithoutItemMetadata>()
         htmlFactory.makeIndexHTML = { content, _ in
-            HTML(.body(content.body.node))
+            HTML(.body(content.body.node)).asTemplate
         }
 
         try publishWebsite(

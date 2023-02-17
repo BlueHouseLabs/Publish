@@ -4,19 +4,19 @@
 *  MIT license, see LICENSE file for details
 */
 
-import Plot
+//import Plot
 
 /// Type used to implement an HTML theme.
 /// When implementing reusable themes that are vended as frameworks or APIs,
 /// it's recommended to create them using static factory methods, just like
 /// how the built-in `foundation` theme is implemented.
 public struct Theme<Site: Website> {
-    internal let makeIndexHTML: (Index, PublishingContext<Site>) throws -> HTML
-    internal let makeSectionHTML: (Section<Site>, PublishingContext<Site>) throws -> HTML
-    internal let makeItemHTML: (Item<Site>, PublishingContext<Site>) throws -> HTML
-    internal let makePageHTML: (Page, PublishingContext<Site>) throws -> HTML
-    internal let makeTagListHTML: (TagListPage, PublishingContext<Site>) throws -> HTML?
-    internal let makeTagDetailsHTML: (TagDetailsPage, PublishingContext<Site>) throws -> HTML?
+    internal let makeIndexHTML: (Index, PublishingContext<Site>) throws -> HTMLTemplate
+    internal let makeSectionHTML: (Section<Site>, PublishingContext<Site>) throws -> HTMLTemplate
+    internal let makeItemHTML: (Item<Site>, PublishingContext<Site>) throws -> HTMLTemplate
+    internal let makePageHTML: (Page, PublishingContext<Site>) throws -> HTMLTemplate
+    internal let makeTagListHTML: (TagListPage, PublishingContext<Site>) throws -> HTMLTemplate?
+    internal let makeTagDetailsHTML: (TagDetailsPage, PublishingContext<Site>) throws -> HTMLTemplate?
     internal let resourcePaths: Set<Path>
     internal let creationPath: Path
 

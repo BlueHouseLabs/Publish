@@ -4,13 +4,11 @@
 *  MIT license, see LICENSE file for details
 */
 
-import Plot
 import Files
 import CollectionConcurrencyKit
 
 internal struct HTMLGenerator<Site: Website> {
     let theme: Theme<Site>
-    let indentation: Indentation.Kind?
     let fileMode: HTMLFileMode
     let context: PublishingContext<Site>
 
@@ -54,14 +52,13 @@ private extension HTMLGenerator {
     func generateIndexHTML() throws {
         let html = try theme.makeIndexHTML(context.index, context)
         let indexFile = try context.createOutputFile(at: "index.html")
-        try indexFile.write(html.render(indentedBy: indentation))
+        try indexFile.write(html.render())
     }
 
     func generateSectionHTML() async throws {
         try await context.sections.concurrentForEach { section in
             try outputHTML(
                 for: section,
-                indentedBy: indentation,
                 using: theme.makeSectionHTML,
                 fileMode: .foldersAndIndexFiles
             )
@@ -69,7 +66,6 @@ private extension HTMLGenerator {
             try await section.items.concurrentForEach { item in
                 try outputHTML(
                     for: item,
-                    indentedBy: indentation,
                     using: theme.makeItemHTML,
                     fileMode: fileMode
                 )
@@ -81,7 +77,6 @@ private extension HTMLGenerator {
         try await context.pages.values.concurrentForEach { page in
             try outputHTML(
                 for: page,
-                indentedBy: indentation,
                 using: theme.makePageHTML,
                 fileMode: fileMode
             )
@@ -102,7 +97,7 @@ private extension HTMLGenerator {
         if let listHTML = try theme.makeTagListHTML(listPage, context) {
             let listPath = Path("\(config.basePath)/index.html")
             let listFile = try context.createOutputFile(at: listPath)
-            try listFile.write(listHTML.render(indentedBy: indentation))
+            try listFile.write(listHTML.render())
         }
 
         try await context.allTags.concurrentForEach { tag in
@@ -121,7 +116,6 @@ private extension HTMLGenerator {
 
             try outputHTML(
                 for: detailsPage,
-                indentedBy: indentation,
                 using: { _, _ in detailsHTML },
                 fileMode: fileMode
             )
@@ -130,14 +124,14 @@ private extension HTMLGenerator {
 
     func outputHTML<T: Location>(
         for location: T,
-        indentedBy indentation: Indentation.Kind?,
-        using generator: (T, PublishingContext<Site>) throws -> HTML,
+//        indentedBy indentation: Indentation.Kind?,
+        using generator: (T, PublishingContext<Site>) throws -> HTMLTemplate,
         fileMode: HTMLFileMode
     ) throws {
         let html = try generator(location, context)
         let path = filePath(for: location, fileMode: fileMode)
         let file = try context.createOutputFile(at: path)
-        try file.write(html.render(indentedBy: indentation))
+        try file.write(html.render())
     }
 
     func filePath(for location: Location, fileMode: HTMLFileMode) -> Path {
