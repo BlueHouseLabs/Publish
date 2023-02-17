@@ -4,13 +4,11 @@
 *  MIT license, see LICENSE file for details
 */
 
-import Plot
 import Files
 import CollectionConcurrencyKit
 
 internal struct HTMLGenerator<Site: Website> {
     let theme: Theme<Site>
-    let indentation: Indentation.Kind?
     let fileMode: HTMLFileMode
     let context: PublishingContext<Site>
 
@@ -55,7 +53,7 @@ private extension HTMLGenerator {
         let html = try theme.makeIndexHTML(context.index, context)
         let path = Path("index.html")
         let indexFile = try context.createOutputFile(at: path)
-        try indexFile.write(html.render(indentedBy: indentation))
+        try indexFile.write(html.render())
         return [path]
     }
 
@@ -65,7 +63,6 @@ private extension HTMLGenerator {
 
             let sectionPath = try outputHTML(
                 for: section,
-                indentedBy: indentation,
                 using: theme.makeSectionHTML,
                 fileMode: .foldersAndIndexFiles
             )
@@ -74,7 +71,6 @@ private extension HTMLGenerator {
             let sectionItemPaths = try await section.items.concurrentMap { item -> Path in
                 try outputHTML(
                     for: item,
-                    indentedBy: indentation,
                     using: theme.makeItemHTML,
                     fileMode: fileMode
                 )
@@ -89,7 +85,6 @@ private extension HTMLGenerator {
         try await context.pages.values.concurrentMap { page -> Path in
             try outputHTML(
                 for: page,
-                indentedBy: indentation,
                 using: theme.makePageHTML,
                 fileMode: fileMode
             )
@@ -111,7 +106,7 @@ private extension HTMLGenerator {
         if let listHTML = try theme.makeTagListHTML(listPage, context) {
             let listPath = Path("\(config.basePath)/index.html")
             let listFile = try context.createOutputFile(at: listPath)
-            try listFile.write(listHTML.render(indentedBy: indentation))
+            try listFile.write(listHTML.render())
             allPaths.append(listPath)
         }
 
@@ -131,7 +126,6 @@ private extension HTMLGenerator {
 
             return try outputHTML(
                 for: detailsPage,
-                indentedBy: indentation,
                 using: { _, _ in detailsHTML },
                 fileMode: fileMode
             )
@@ -159,14 +153,13 @@ private extension HTMLGenerator {
 
     func outputHTML<T: Location>(
         for location: T,
-        indentedBy indentation: Indentation.Kind?,
-        using generator: (T, PublishingContext<Site>) throws -> HTML,
+        using generator: (T, PublishingContext<Site>) throws -> HTMLTemplate,
         fileMode: HTMLFileMode
     ) throws -> Path {
         let html = try generator(location, context)
         let path = filePath(for: location, fileMode: fileMode)
         let file = try context.createOutputFile(at: path)
-        try file.write(html.render(indentedBy: indentation))
+        try file.write(html.render())
         return path
     }
 

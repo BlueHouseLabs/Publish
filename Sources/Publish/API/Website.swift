@@ -84,7 +84,7 @@ public extension Website {
                 .addMarkdownFiles(),
                 .sortItems(by: \.date, order: .descending),
                 .group(additionalSteps),
-                .generateHTML(withTheme: theme, indentation: indentation),
+                .generateHTML(withTheme: theme),
                 .unwrap(rssFeedConfig) { config in
                     .generateRSSFeed(
                         including: rssFeedSections,

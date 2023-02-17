@@ -10,17 +10,40 @@ public extension Theme {
     /// The default "Foundation" theme that Publish ships with, a very
     /// basic theme mostly implemented for demonstration purposes.
     static var foundation: Self {
+        foundation()
+    }
+    
+    static func foundation(indentation: Indentation.Kind? = nil) -> Self {
         Theme(
-            htmlFactory: FoundationHTMLFactory(),
+            htmlFactory: FoundationHTMLFactory(indentation: indentation),
             resourcePaths: ["Resources/FoundationTheme/styles.css"]
         )
     }
 }
 
+struct FoundationHTMLTemplate {
+    let indentation: Indentation.Kind?
+    let html: HTML
+}
+
+extension FoundationHTMLTemplate: HTMLTemplate {
+    func render() -> String {
+        html.render(indentedBy: indentation)
+    }
+}
+
+extension HTML {
+    var asTemplate: HTMLTemplate {
+        FoundationHTMLTemplate(indentation: nil, html: self)
+    }
+}
+
 private struct FoundationHTMLFactory<Site: Website>: HTMLFactory {
+    let indentation: Indentation.Kind?
+    
     func makeIndexHTML(for index: Index,
-                       context: PublishingContext<Site>) throws -> HTML {
-        HTML(
+                       context: PublishingContext<Site>) throws -> HTMLTemplate {
+        FoundationHTMLTemplate(indentation: indentation, html: HTML(
             .lang(context.site.language),
             .head(for: index, on: context.site),
             .body {
@@ -40,12 +63,12 @@ private struct FoundationHTMLFactory<Site: Website>: HTMLFactory {
                 }
                 SiteFooter()
             }
-        )
+        ))
     }
 
     func makeSectionHTML(for section: Section<Site>,
-                         context: PublishingContext<Site>) throws -> HTML {
-        HTML(
+                         context: PublishingContext<Site>) throws -> HTMLTemplate {
+        FoundationHTMLTemplate(indentation: indentation, html: HTML(
             .lang(context.site.language),
             .head(for: section, on: context.site),
             .body {
@@ -56,12 +79,12 @@ private struct FoundationHTMLFactory<Site: Website>: HTMLFactory {
                 }
                 SiteFooter()
             }
-        )
+        ))
     }
 
     func makeItemHTML(for item: Item<Site>,
-                      context: PublishingContext<Site>) throws -> HTML {
-        HTML(
+                      context: PublishingContext<Site>) throws -> HTMLTemplate {
+        FoundationHTMLTemplate(indentation: indentation, html: HTML(
             .lang(context.site.language),
             .head(for: item, on: context.site),
             .body(
@@ -78,12 +101,12 @@ private struct FoundationHTMLFactory<Site: Website>: HTMLFactory {
                     SiteFooter()
                 }
             )
-        )
+        ))
     }
 
     func makePageHTML(for page: Page,
-                      context: PublishingContext<Site>) throws -> HTML {
-        HTML(
+                      context: PublishingContext<Site>) throws -> HTMLTemplate {
+        FoundationHTMLTemplate(indentation: indentation, html: HTML(
             .lang(context.site.language),
             .head(for: page, on: context.site),
             .body {
@@ -91,12 +114,12 @@ private struct FoundationHTMLFactory<Site: Website>: HTMLFactory {
                 Wrapper(page.body)
                 SiteFooter()
             }
-        )
+        ))
     }
 
     func makeTagListHTML(for page: TagListPage,
-                         context: PublishingContext<Site>) throws -> HTML? {
-        HTML(
+                         context: PublishingContext<Site>) throws -> HTMLTemplate? {
+        FoundationHTMLTemplate(indentation: indentation, html: HTML(
             .lang(context.site.language),
             .head(for: page, on: context.site),
             .body {
@@ -115,12 +138,12 @@ private struct FoundationHTMLFactory<Site: Website>: HTMLFactory {
                 }
                 SiteFooter()
             }
-        )
+        ))
     }
 
     func makeTagDetailsHTML(for page: TagDetailsPage,
-                            context: PublishingContext<Site>) throws -> HTML? {
-        HTML(
+                            context: PublishingContext<Site>) throws -> HTMLTemplate? {
+        FoundationHTMLTemplate(indentation: indentation, html: HTML(
             .lang(context.site.language),
             .head(for: page, on: context.site),
             .body {
@@ -147,7 +170,7 @@ private struct FoundationHTMLFactory<Site: Website>: HTMLFactory {
                 }
                 SiteFooter()
             }
-        )
+        ))
     }
 }
 

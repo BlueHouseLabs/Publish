@@ -5,7 +5,7 @@
 */
 
 import XCTest
-import Publish
+@testable import Publish
 import Plot
 import Files
 
@@ -19,7 +19,7 @@ final class HTMLGenerationTests: PublishTestCase {
 
     func testGeneratingIndexHTML() throws {
         htmlFactory.makeIndexHTML = { content, _ in
-            HTML(.body(.text(content.title)))
+            HTML(.body(.text(content.title))).asTemplate
         }
 
         try publishWebsite(
@@ -31,7 +31,7 @@ final class HTMLGenerationTests: PublishTestCase {
 
     func testGeneratingSectionHTML() throws {
         htmlFactory.makeSectionHTML = { section, _ in
-            HTML(.body(.text(section.title)))
+            HTML(.body(.text(section.title))).asTemplate
         }
 
         try publishWebsite(
@@ -53,7 +53,7 @@ final class HTMLGenerationTests: PublishTestCase {
                 .unwrap(item.audio?.url, { .text($0.absoluteString) }),
                 .text(" "),
                 .text(item.title)
-            ))
+            )).asTemplate
         }
 
         try publishWebsite(
@@ -81,7 +81,7 @@ final class HTMLGenerationTests: PublishTestCase {
 
     func testGeneratingNestedItemHTML() throws {
         htmlFactory.makeItemHTML = { item, _ in
-            HTML(.body(.text(item.title)))
+            HTML(.body(.text(item.title))).asTemplate
         }
 
         try publishWebsite(
@@ -103,7 +103,7 @@ final class HTMLGenerationTests: PublishTestCase {
 
     func testGeneratingPageHTML() throws {
         htmlFactory.makePageHTML = { page, _ in
-            HTML(.body(.text(page.title)))
+            HTML(.body(.text(page.title))).asTemplate
         }
 
         try publishWebsite(
@@ -132,11 +132,11 @@ final class HTMLGenerationTests: PublishTestCase {
                 .forEach(page.tags.sorted()) {
                     .li(.text($0.string))
                 }
-            )))
+            ))).asTemplate
         }
 
         htmlFactory.makeTagDetailsHTML = { page, _ in
-            HTML(.body(.text(page.tag.string)))
+            HTML(.body(.text(page.tag.string))).asTemplate
         }
 
         try publishWebsite(
@@ -168,7 +168,7 @@ final class HTMLGenerationTests: PublishTestCase {
 
     func testCleaningUpOldHTMLFiles() throws {
         htmlFactory.makePageHTML = { page, _ in
-            HTML(.body(.text(page.title)))
+            HTML(.body(.text(page.title))).asTemplate
         }
 
         let folder = try Folder.createTemporary()
@@ -198,7 +198,7 @@ final class HTMLGenerationTests: PublishTestCase {
 
     func testAlwaysGeneratingIndexPageForAllSections() throws {
         htmlFactory.makeSectionHTML = { section, _ in
-            HTML(.body(.text(section.id.rawValue)))
+            HTML(.body(.text(section.id.rawValue))).asTemplate
         }
 
         try publishWebsite(
