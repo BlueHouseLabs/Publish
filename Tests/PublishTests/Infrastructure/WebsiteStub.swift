@@ -28,6 +28,9 @@ class WebsiteStub {
     }
 }
 
+extension Language: Encodable {}
+extension WebsiteStub: Encodable {}
+
 extension WebsiteStub {
     final class WithItemMetadata<ItemMetadata: WebsiteItemMetadata>: WebsiteStub, Website {}
 
@@ -41,3 +44,4 @@ extension WebsiteStub {
         struct ItemMetadata: WebsiteItemMetadata {}
     }
 }
+extension WebsiteStub.WithPodcastMetadata.ItemMetadata: Encodable {}

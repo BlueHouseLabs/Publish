@@ -31,6 +31,12 @@ public struct TagHTMLConfiguration {
     }
 }
 
+extension TagHTMLConfiguration: Encodable {
+    private enum CodingKeys: String, CodingKey {
+        case basePath, listContent
+    }
+}
+
 public extension TagHTMLConfiguration {
     /// Create a default tag HTML configuration implementation.
     static var `default`: Self { .init() }

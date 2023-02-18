@@ -16,6 +16,8 @@ public struct Tag: StringWrapper {
     }
 }
 
+extension Tag: Encodable {}
+
 public extension Tag {
     /// Return a normalized string representation of this tag, which can
     /// be used to form URLs or identifiers.

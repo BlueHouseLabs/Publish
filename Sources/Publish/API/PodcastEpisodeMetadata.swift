@@ -28,6 +28,7 @@ public struct PodcastEpisodeMetadata: Hashable {
     }
 }
 
+extension PodcastEpisodeMetadata: Encodable {}
 extension PodcastEpisodeMetadata: Decodable {
     public init(from decoder: Decoder) throws {
         episodeNumber = try decoder.decodeIfPresent("episode")

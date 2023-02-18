@@ -13,3 +13,5 @@ public struct TagDetailsPage: Location {
     public let path: Path
     public var content: Content
 }
+
+extension TagDetailsPage: Encodable {}

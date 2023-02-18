@@ -37,6 +37,9 @@ public struct Audio: Hashable {
     }
 }
 
+extension Audio: Encodable {}
+extension Audio.Duration: Encodable {}
+
 public extension Audio {
     /// A representation of an audio file's duration.
     struct Duration: Hashable {

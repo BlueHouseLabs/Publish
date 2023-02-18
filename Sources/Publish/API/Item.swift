@@ -48,6 +48,8 @@ public struct Item<Site: Website>: AnyItem, Hashable {
     }
 }
 
+extension Item: Encodable {}
+
 internal extension Item {
     var rssTitle: String {
         let prefix = rssProperties.titlePrefix ?? ""
