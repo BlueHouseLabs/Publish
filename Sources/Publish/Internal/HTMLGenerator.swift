@@ -31,8 +31,7 @@ private extension HTMLGenerator {
             return []
         }
 
-        let creationFile = try File(path: theme.creationPath.string)
-        let packageFolder = try creationFile.resolveSwiftPackageFolder()
+        let packageFolder = try packageFolder(forPath: theme.creationPath)
 
         return try await theme.resourcePaths.concurrentMap { path -> Path in
             do {

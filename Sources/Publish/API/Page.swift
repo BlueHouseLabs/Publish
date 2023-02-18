@@ -24,3 +24,5 @@ public struct Page: Location, Equatable {
         self.content = content
     }
 }
+
+extension Page: Encodable {}

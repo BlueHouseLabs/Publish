@@ -26,6 +26,8 @@ public struct SectionMap<Site: Website> {
     }
 }
 
+extension SectionMap: Encodable {}
+
 extension SectionMap: Sequence {
     public func makeIterator() -> AnyIterator<Section<Site>> {
         var ids = self.ids.makeIterator()

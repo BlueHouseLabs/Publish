@@ -18,6 +18,8 @@ public enum Video: Hashable {
     case vimeo(id: String)
 }
 
+extension Video: Encodable {}
+
 extension Video: Decodable {
     public init(from decoder: Decoder) throws {
         if let youTubeID: String = try decoder.decodeIfPresent("youTube") {

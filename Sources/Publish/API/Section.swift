@@ -31,6 +31,8 @@ public struct Section<Site: Website>: Location {
     }
 }
 
+extension Section: Encodable {}
+
 public extension Section {
     /// Retrieve an item that's located within a given path within the section.
     /// - parameter path: The relative path of the item to retrieve.

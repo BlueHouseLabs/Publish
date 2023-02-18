@@ -11,3 +11,6 @@ public struct Index: Location {
     public var path: Path { "" }
     public var content = Content()
 }
+
+extension Path: Encodable {}
+extension Index: Encodable {}

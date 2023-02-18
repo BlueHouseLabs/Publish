@@ -9,9 +9,9 @@ import Plot
 import Dispatch
 
 /// Protocol that all `Website.SectionID` implementations must conform to.
-public protocol WebsiteSectionID: Decodable, Hashable, CaseIterable, RawRepresentable where RawValue == String {}
+public protocol WebsiteSectionID: Codable, Hashable, CaseIterable, RawRepresentable where RawValue == String {}
 /// Protocol that all `Website.ItemMetadata` implementations must conform to.
-public typealias WebsiteItemMetadata = Decodable & Hashable
+public typealias WebsiteItemMetadata = Codable & Hashable
 
 /// Protocol used to define a Publish-based website.
 /// You conform to this protocol using a custom type, which is then used to
@@ -20,7 +20,7 @@ public typealias WebsiteItemMetadata = Decodable & Hashable
 /// up of `PublishingStep` values, which is constructed using the `publish` method.
 /// To generate the necessary bootstrapping for conforming to this protocol, use
 /// the `publish new` command line tool.
-public protocol Website {
+public protocol Website: Encodable {
     /// The enum type used to represent the website's section IDs.
     associatedtype SectionID: WebsiteSectionID
     /// The type that defines any custom metadata for the website.

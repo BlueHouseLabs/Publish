@@ -52,6 +52,23 @@ public struct PublishingContext<Site: Website> {
     }
 }
 
+extension PublishingContext: Encodable {
+    private enum CodingKeys: String, CodingKey {
+        case site, index, sections, pages, allTags, lastGenerationDate
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(site, forKey: .site)
+        try container.encode(index, forKey: .index)
+        try container.encode(sections, forKey: .sections)
+        try container.encode(pages, forKey: .pages)
+        try container.encode(allTags, forKey: .allTags)
+        try container.encode(lastGenerationDate, forKey: .lastGenerationDate)
+        
+    }
+}
+
 public extension PublishingContext {
     /// Retrieve a folder at a given path, starting from the website's root folder.
     /// - parameter path: The path to retrieve a folder for.

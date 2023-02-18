@@ -46,6 +46,9 @@ public struct Content: Hashable, ContentProtocol {
     }
 }
 
+extension Content: Encodable {}
+extension Content.Body: Encodable {}
+
 public extension Content {
     /// Type that represents the main renderable body of a piece of content.
     struct Body: Hashable {
