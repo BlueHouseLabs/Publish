@@ -40,12 +40,14 @@ private extension SiteMapGenerator {
                 guard shouldIncludePath(section.path) else {
                     return .empty
                 }
+                
+                let sectionChangeFreq = section.content.changeFrequency?.asPlotEnum ?? .daily
 
                 return .group(
                     .url(
                         .loc(site.url(for: section)),
-                        .changefreq(.daily),
-                        .priority(1.0),
+                        .changefreq(sectionChangeFreq),
+                        .priority(section.content.contentPriority ?? 1.0),
                         .lastmod(max(
                             section.lastModified,
                             section.lastItemModificationDate ?? .distantPast
@@ -58,8 +60,8 @@ private extension SiteMapGenerator {
 
                         return .url(
                             .loc(site.url(for: item)),
-                            .changefreq(.monthly),
-                            .priority(0.5),
+                            .changefreq(item.content.changeFrequency?.asPlotEnum ?? .monthly),
+                            .priority(item.content.contentPriority ?? 0.5),
                             .lastmod(item.lastModified)
                         )
                     }
@@ -72,11 +74,19 @@ private extension SiteMapGenerator {
 
                 return .url(
                     .loc(site.url(for: page)),
-                    .changefreq(.monthly),
-                    .priority(0.5),
+                    .changefreq(page.content.changeFrequency?.asPlotEnum ?? .monthly),
+                    .priority(page.content.contentPriority ?? 0.5),
                     .lastmod(page.lastModified)
                 )
             }
         )
     }
+}
+
+private extension ChangeFrequency {
+    
+    var asPlotEnum: SiteMapChangeFrequency? {
+        SiteMapChangeFrequency(rawValue: rawValue)
+    }
+    
 }
