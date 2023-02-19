@@ -64,6 +64,8 @@ private extension MarkdownContentFactory {
         let description = try decoder.decodeIfPresent("description", as: String.self)
         let date = try resolvePublishingDate(fromFile: file, decoder: decoder)
         let lastModified = file.modificationDate ?? date
+        let contentPriority = try decoder.decodeIfPresent("contentPriority", as: Double.self)
+        let changeFrequency = try decoder.decodeIfPresent("changeFrequency", as: ChangeFrequency.self)
         let imagePath = try decoder.decodeIfPresent("image", as: Path.self)
         let audio = try decoder.decodeIfPresent("audio", as: Audio.self)
         let video = try decoder.decodeIfPresent("video", as: Video.self)
@@ -76,7 +78,9 @@ private extension MarkdownContentFactory {
             lastModified: lastModified,
             imagePath: imagePath,
             audio: audio,
-            video: video
+            video: video,
+            changeFrequency: changeFrequency,
+            contentPriority: contentPriority
         )
     }
 

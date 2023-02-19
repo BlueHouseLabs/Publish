@@ -7,6 +7,16 @@
 import Foundation
 import Plot
 
+public enum ChangeFrequency: String, Codable {
+    case always
+    case hourly
+    case daily
+    case weekly
+    case monthly
+    case yearly
+    case never
+}
+
 /// Type representing a location's main content.
 public struct Content: Hashable, ContentProtocol {
     public var title: String
@@ -17,6 +27,8 @@ public struct Content: Hashable, ContentProtocol {
     public var imagePath: Path?
     public var audio: Audio?
     public var video: Video?
+    public var changeFrequency: ChangeFrequency?
+    public var contentPriority: Double?
 
     /// Initialize a new instance of this type
     /// - parameter title: The location's title.
@@ -27,6 +39,8 @@ public struct Content: Hashable, ContentProtocol {
     /// - parameter imagePath: A path to any image for the location.
     /// - parameter audio: Any audio data associated with this content.
     /// - parameter video: Any video data associated with this content.
+    /// - parameter changeFrequency: Content change frequency (Mostly used for this content in the XML sitemap.)
+    /// - parameter contentPriority: Content priority (Mostly used for this content in the XML sitemap.)
     public init(title: String = "",
                 description: String = "",
                 body: Body = Body(html: ""),
@@ -34,7 +48,10 @@ public struct Content: Hashable, ContentProtocol {
                 lastModified: Date = Date(),
                 imagePath: Path? = nil,
                 audio: Audio? = nil,
-                video: Video? = nil) {
+                video: Video? = nil,
+                changeFrequency: ChangeFrequency? = nil,
+                contentPriority: Double? = nil
+    ) {
         self.title = title
         self.description = description
         self.body = body
@@ -43,6 +60,8 @@ public struct Content: Hashable, ContentProtocol {
         self.imagePath = imagePath
         self.audio = audio
         self.video = video
+        self.changeFrequency = changeFrequency
+        self.contentPriority = contentPriority
     }
 }
 
